@@ -1,0 +1,21 @@
+{"users": [
+    {
+        "nick": "Admin",
+        "password": "bongololo12", 
+        "permission": "4", 
+        "number": "14"
+    }, 
+    {
+        "nick": "worker1",
+        "password": "ihatenig",
+        "permission": "2",
+        "number": "12"
+    }, 
+    {
+        "nick": "worker2",
+        "password": "iamspongebob",
+        "permission": "3",
+        "number": "37"
+    }
+    ]
+}
