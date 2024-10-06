@@ -1,0 +1,12 @@
+Lista uzytkownikow
+nick: Admin, password: bongololo12, permission: 4, number: 14
+nick: worker1, password: ihatenig, permission: 2, number: 12
+nick: worker2, password: iamspongebob, permission: 3, number: 37
+Lista produktow
+name: Uran, price: 500, quantity: 101
+name: IGOR album, price: 59.99, quantity: 17
+name: Myslovitz - Milosc w czasach popkultury, price: 100, quantity: 1
+name: Myslovitz - Korova Milky Bar, price: 80, quantity: 16
+name: Szyszka, price: 1, quantity: 0
+Pieniadze
+money: 9967

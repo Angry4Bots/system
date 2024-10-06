@@ -4,19 +4,6 @@ try:
         d = json.load(f)
 except:
     print("coś poszło nie tak")
-# class Worker:
-#     employee = dict
-#     def __init__(self,nick,password,permission,number):
-#         self.nick = nick
-#         self.password = password
-#         self.permission = permission
-#         self.number = number
-#     def create_an_employee(self):
-#         employee = {}
-#         employee["nick"] = self.nick,
-#         employee["password"] = self.password,
-#         employee["permission"] = self.permission,
-#         employee["number"] = self.number,
 
 p = True
 log_out = -1
@@ -25,10 +12,9 @@ def browser(i):
     global log_out
     spongebob = -1
     print("Witam "+i["nick"])
-    print(i)
     i = i
     while p:
-        print(i)
+        a = open("raport.txt","w")
         print("0.Wyjście")
         print("1.Towary")
         print("2.Użytkownicy")
@@ -90,14 +76,16 @@ def browser(i):
             print("1.Sprzedaż")
             print("2.Kupno")
             print("3.Sprawdzenie pieniędzy")
+            print("4.Sprawdzenie towarów")
+            print("5.Wróc do menu")
             try:
                 browsing = int(input("Twój wybór:"))
             except ValueError:
                 print("Jeszcze raz, wpisz tym razem liczbe")
-                browsing = int(input("Twój wybór:"))
-            if browsing > 3:
+                continue
+            if browsing > 4:
                 print("Kurcze chyba troche za daleko")
-                browsing = int(input("Twój wybór:"))
+                continue
             if browsing == 3:
                 with open('currency.json','r') as money:
                     c = json.load(money)
@@ -105,17 +93,18 @@ def browser(i):
                 for m in c["list of money"]:
                     clean_m = str(m).replace("{","").replace("[","").replace("'","").replace("}","")
                     print(clean_m + "\n")
-            if int(i["permission"]) > 2 and browsing == 2:
+            if int(i["permission"]) >= 2 and browsing == 2:
                 with open('black market.json','r') as buy:
                     t = json.load(buy)
-                for i in t["products"]:
-                    clean_i = str(i).replace("{","").replace("[","").replace("'","").replace("}","")
-                    print(clean_i)
+                for q in t["products"]:
+                    clean_q = str(q).replace("{","").replace("[","").replace("'","").replace("}","")
+                    print(clean_q)
                 print("Co chcesz kupić")
                 print("1.Nic")
                 print("2.Jurka Owsiaka")
                 print("3.Artura Rojka")
                 print("4.Magika")
+                print("5.Szyszke")
                 try:
                     choice = int(input("Twój wybór:"))
                 except ValueError:
@@ -168,10 +157,13 @@ def browser(i):
                         with open('users.json', 'r') as f:
                             data = json.load(f)
                         data["users"].append({"nick": "Artur Rojek", "password": "KochamPloty1972", "permission": "4", "number": "52"})
+                        buy_file.close()
                         with open('users.json', 'w') as user:
                             json.dump(data, user)
+                        user.close()
                         with open('currency.json', 'w') as money_file:
                             json.dump(v, money_file)
+                        money_file.close()
 
                 if choice == 4:
                     print("Nie ma Magika😔")
@@ -198,11 +190,216 @@ def browser(i):
                             w["products"][4]["quantity"] = str(int(w["products"][choice - 2]["quantity"]) + 1)
                         except IndexError:
                             w["products"].append({"name": "Szyszka", "price": "1", "quantity": "1"})
+                        buy_file.close()
                         with open('products.json', 'w') as f:
                             json.dump(w, f)
+                        f.close()
                         with open('currency.json', 'w') as money_file:
                             json.dump(v, money_file)
-                
+                        money_file.close()
+            if int(i["permission"]) < 2 and browsing == 2:
+                print("Nie możesz skorzystać z tej opcji")
+                continue
+            if int(i["permission"]) < 2 and browsing == 1:
+                print("Nie możesz skorzystać z tej opcji")
+                continue
+            if int(i["permission"]) < 2 and browsing == 4:
+                print("Nie możesz skorzystać z tej opcji")
+                continue
+            if int(i["permission"]) >= 2 and browsing == 4:
+                with open('products.json','r') as buy:
+                    t = json.load(buy)
+                for q in t["products"]:
+                    clean_q = str(q).replace("{","").replace("[","").replace("'","").replace("}","")
+                    print(clean_q)
+                buy.close()
+            if int(i["permission"]) >= 2 and browsing == 1:
+                with open('products.json','r') as buy:
+                    t = json.load(buy)
+                for q in t["products"]:
+                    clean_q = str(q).replace("{","").replace("[","").replace("'","").replace("}","")
+                    print(clean_q)
+                print("Co chcesz sprzedać")
+                print("1.Nic")
+                print("2.Uran")
+                print("3.IGOR album")
+                print("4.Myslovitz - Milosc w czasach popkultury")
+                print("5.Myslovitz - Korova Milky Bar")
+                if q["name"] == "Szyszka":
+                    print("6.Szyszka")
+                    buy.close()
+                try:
+                    choice = int(input("Twój wybór:"))
+                except ValueError:
+                    print("Jeszcze raz, wpisz tym razem liczbe")
+                    continue
+                if choice == 2:
+                    with open('currency.json', 'r') as ilikemoney:
+                        v = json.load(ilikemoney)
+                        money = int(v["list of money"][0]["money"])
+                    with open('products.json', 'r') as buy:
+                        t = json.load(buy)
+                        price = int(t["products"][choice - 2]["price"])
+                        quantity = int(t["products"][choice - 2]["quantity"])
+                    print("Ile chcesz sprzedać")
+                    try:
+                        ilosc = int(input("Twój wybór:"))
+                    except ValueError:
+                        print("Jeszcze raz, wpisz tym razem liczbe")
+                        continue
+                    if ilosc > quantity:
+                        print("Nie mamy tyle tego przedmiotu")
+                    if quantity < 1:
+                        print("Nie możesz tego sprzedać")
+                    if ilosc <= quantity:
+                        if quantity >= 1:
+                            v["list of money"][0]["money"] = str(money + (price * ilosc))
+                            t["products"][choice - 2]["quantity"] = str(quantity - ilosc)
+                            print(f"Brawo sprzedałeś {ilosc} Uranu")
+                        with open('products.json', 'w') as f:
+                            json.dump(t, f)
+                        f.close()
+                        with open('currency.json', 'w') as money_file:
+                            json.dump(v, money_file)
+                        money_file.close()
+                if choice == 3:
+                    with open('currency.json', 'r') as ilikemoney:
+                        v = json.load(ilikemoney)
+                        money = int(v["list of money"][0]["money"])
+                    with open('products.json', 'r') as buy:
+                        t = json.load(buy)
+                        price = int(t["products"][choice - 2]["price"])
+                        quantity = int(t["products"][choice - 2]["quantity"])
+                    print("Ile chcesz sprzedać")
+                    try:
+                        ilosc = int(input("Twój wybór:"))
+                    except ValueError:
+                        print("Jeszcze raz, wpisz tym razem liczbe")
+                        continue
+                    if ilosc > quantity:
+                        print("Nie mamy tyle tego przedmiotu")
+                    if quantity < 1:
+                        print("Nie możesz tego sprzedać")
+                    if ilosc <= quantity:
+                        if quantity >= 1:
+                            v["list of money"][0]["money"] = str(money + (price * ilosc))
+                            t["products"][choice - 2]["quantity"] = str(quantity - ilosc)
+                            print(f"Brawo sprzedałeś {ilosc} IGOR album")
+                        with open('products.json', 'w') as f:
+                            json.dump(t, f)
+                        f.close()
+                        with open('currency.json', 'w') as money_file:
+                            json.dump(v, money_file)
+                        money_file.close()
+                if choice == 4:
+                    with open('currency.json', 'r') as ilikemoney:
+                        v = json.load(ilikemoney)
+                        money = int(v["list of money"][0]["money"])
+                    with open('products.json', 'r') as buy:
+                        t = json.load(buy)
+                        price = int(t["products"][choice - 2]["price"])
+                        quantity = int(t["products"][choice - 2]["quantity"])
+                    print("Ile chcesz sprzedać")
+                    try:
+                        ilosc = int(input("Twój wybór:"))
+                    except ValueError:
+                        print("Jeszcze raz, wpisz tym razem liczbe")
+                        continue
+                    if ilosc > quantity:
+                        print("Nie mamy tyle tego przedmiotu")
+                    if quantity < 1:
+                        print("Nie możesz tego sprzedać")
+                    if ilosc <= quantity:
+                        if quantity >= 1:
+                            v["list of money"][0]["money"] = str(money + (price * ilosc))
+                            t["products"][choice - 2]["quantity"] = str(quantity - ilosc)
+                            print(f"Brawo sprzedałeś {ilosc} Myslovitz - Milosc w czasach popkultury")
+                        with open('products.json', 'w') as f:
+                            json.dump(t, f)
+                        f.close()
+                        with open('currency.json', 'w') as money_file:
+                            json.dump(v, money_file)
+                        money_file.close()
+                if choice == 5:
+                    with open('currency.json', 'r') as ilikemoney:
+                        v = json.load(ilikemoney)
+                        money = int(v["list of money"][0]["money"])
+                    with open('products.json', 'r') as buy:
+                        t = json.load(buy)
+                        price = int(t["products"][choice - 2]["price"])
+                        quantity = int(t["products"][choice - 2]["quantity"])
+                    print("Ile chcesz sprzedać")
+                    try:
+                        ilosc = int(input("Twój wybór:"))
+                    except ValueError:
+                        print("Jeszcze raz, wpisz tym razem liczbe")
+                        continue
+                    if ilosc > quantity:
+                        print("Nie mamy tyle tego przedmiotu")
+                    if quantity < 1:
+                        print("Nie możesz tego sprzedać")
+                    if ilosc <= quantity:
+                        if quantity >= 1:
+                            v["list of money"][0]["money"] = str(money + (price * ilosc))
+                            t["products"][choice - 2]["quantity"] = str(quantity - ilosc)
+                            print(f"Brawo sprzedałeś {ilosc} Myslovitz - Korova Milky Bar")
+                        with open('products.json', 'w') as f:
+                            json.dump(t, f)
+                        f.close()
+                        with open('currency.json', 'w') as money_file:
+                            json.dump(v, money_file)
+                        money_file.close()
+                if choice == 6:
+                    with open('currency.json', 'r') as ilikemoney:
+                        v = json.load(ilikemoney)
+                        money = int(v["list of money"][0]["money"])
+                    with open('products.json', 'r') as buy:
+                        t = json.load(buy)
+                        price = int(t["products"][choice - 2]["price"])
+                        quantity = int(t["products"][choice - 2]["quantity"])
+                    print("Ile chcesz sprzedać")
+                    try:
+                        ilosc = int(input("Twój wybór:"))
+                    except ValueError:
+                        print("Jeszcze raz, wpisz tym razem liczbe")
+                        continue
+                    if ilosc > quantity:
+                        print("Nie mamy tyle tego przedmiotu")
+                    if quantity < 1:
+                        print("Nie możesz tego sprzedać")
+                    if quantity >= ilosc:
+                        if quantity >= 1:
+                            v["list of money"][0]["money"] = str(money + (price * ilosc))
+                            t["products"][choice - 2]["quantity"] = str(quantity - ilosc)
+                            print(f"Brawo sprzedałeś {ilosc} Szyszek")
+                        with open('products.json', 'w') as f:
+                            json.dump(t, f)
+                        f.close()
+                        with open('currency.json', 'w') as money_file:
+                            json.dump(v, money_file)
+                        money_file.close()
+        if spongebob == 3:
+            with open('users.json','r') as user:
+                u = json.load(user)
+            a.write("Lista uzytkownikow\n")
+            for r in u["users"]:
+                clean_r = str(r).replace("{","").replace("[","").replace("'","").replace("}","")
+                a.write(clean_r + "\n")
+            user.close()
+            with open('products.json','r') as pro:
+                p = json.load(pro)
+            a.write("Lista produktow\n")
+            for s in p["products"]:
+                clean_s = str(s).replace("{","").replace("[","").replace("'","").replace("}","")
+                a.write(clean_s + "\n")
+            pro.close()
+            with open('currency.json','r') as cure:
+                c = json.load(cure)
+            a.write("Pieniadze\n")
+            for m in c["list of money"]:
+                clean_m = str(m).replace("{","").replace("[","").replace("'","").replace("}","")
+                a.write(clean_m + "\n")
+            
         if spongebob == 0:
             p = False
             log_out = 1
